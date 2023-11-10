@@ -22,10 +22,11 @@ class SongList extends Component {
   }
 
   remove(id) {
-    this.props.mutate({
-      variables: { id },
-      refetchQueries: [{ query }],
-    });
+    this.props
+      .mutate({
+        variables: { id },
+      })
+      .then(() => this.props.data.refetch());
   }
 
   render() {
