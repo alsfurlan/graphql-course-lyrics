@@ -4,8 +4,13 @@ import fetchSong from '../queries/fetchSong';
 
 class SongDetail extends Component {
   render() {
-    console.log(this.props);
-    return <h3>SongDetail</h3>;
+    const { song } = this.props.data;
+
+    if(!song) {
+      return <div>Loading...</div>;
+    }
+
+    return <h3>{song.title}</h3>;
   }
 }
 
