@@ -5,6 +5,10 @@ export default gpl`
         song(id: $id) {
             id
             title
+            lyrics {
+                id
+                content
+            }
         }
     }
 
