@@ -8,6 +8,7 @@ export default gpl`
             lyrics {
                 id
                 content
+                likes
             }
         }
     }
