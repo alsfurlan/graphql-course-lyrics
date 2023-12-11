@@ -43,7 +43,8 @@ mutation AddLyricToSong(
   	id
     lyrics {
       id,
-      content
+      content,
+      likes
     }
   }
 }`;
