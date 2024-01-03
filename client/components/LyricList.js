@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
+import likeLyricMutation from '../mutations/likeLyric';
 
 class LyricList extends Component {
   constructor(props) {
@@ -42,13 +43,4 @@ class LyricList extends Component {
   }
 }
 
-const mutation = gql`
-  mutation LikeLyric($id: ID!) {
-    likeLyric(id: $id) {
-      id
-      likes
-    }
-  }
-`;
-
-export default graphql(mutation)(LyricList);
+export default graphql(likeLyricMutation)(LyricList);
