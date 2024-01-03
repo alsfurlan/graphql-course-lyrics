@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import likeLyricMutation from '../mutations/likeLyric';
+import deleteLyricMutation from '../mutations/deleteLyric';
+import fetchSong from '../queries/fetchSong';
 
 class LyricList extends Component {
   constructor(props) {
@@ -13,7 +15,7 @@ class LyricList extends Component {
   }
 
   onLike(id, likes) {
-    this.props.mutate({
+    this.props.likeLyricMutation({
       variables: { id },
       optimisticResponse: {
         __typename: 'Mutation',
@@ -21,8 +23,20 @@ class LyricList extends Component {
           __typename: 'LyricType',
           id,
           likes: ++likes,
-        }
-      }
+        },
+      },
+    });
+  }
+
+  remove(id) {
+    this.props.deleteLyricMutation({
+      variables: { id },
+      refetchQueries: [
+        {
+          query: fetchSong,
+          variables: { id: this.props.songId },
+        },
+      ],
     });
   }
 
@@ -31,11 +45,17 @@ class LyricList extends Component {
       return (
         <li key={id} className='collection-item'>
           {content}
-          <div className="vote-box">
-            <i className='material-icons' onClick={() => this.onLike(id, likes)}>
+          <div className='vote-box'>
+            <i
+              className='material-icons'
+              onClick={() => this.onLike(id, likes)}
+            >
               thumb_up
             </i>
-            {likes}
+            <div className='likes'>{likes}</div>
+            <i className='material-icons' onClick={() => this.remove(id)}>
+              delete_forever
+            </i>
           </div>
         </li>
       );
@@ -43,4 +63,7 @@ class LyricList extends Component {
   }
 }
 
-export default graphql(likeLyricMutation)(LyricList);
+export default compose(
+  graphql(likeLyricMutation, { name: 'likeLyricMutation' }),
+  graphql(deleteLyricMutation, { name: 'deleteLyricMutation' })
+)(LyricList);

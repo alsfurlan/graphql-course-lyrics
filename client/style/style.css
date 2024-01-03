@@ -10,4 +10,9 @@
 
 .vote-box {
   display: flex;
+  align-items: center;
+}
+
+.vote-box .likes {
+  margin-right: 1rem;
 }
