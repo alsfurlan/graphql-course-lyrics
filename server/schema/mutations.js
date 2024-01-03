@@ -12,44 +12,54 @@ const mutation = new GraphQLObjectType({
     addSong: {
       type: SongType,
       args: {
-        title: { type: GraphQLString }
+        title: { type: GraphQLString },
       },
       resolve(parentValue, { title }) {
         return new Song({ title }).save();
-      }
+      },
+    },
+    updateSong: {
+      type: SongType,
+      args: {
+        id: { type: GraphQLID },
+        title: { type: GraphQLString },
+      },
+      resolve(parentValue, { id, title }) {
+        return Song.findByIdAndUpdate(id, { title });
+      },
     },
     addLyricToSong: {
       type: SongType,
       args: {
         content: { type: GraphQLString },
-        songId: { type: GraphQLID }
+        songId: { type: GraphQLID },
       },
       resolve(parentValue, { content, songId }) {
         return Song.addLyric(songId, content);
-      }
+      },
     },
     likeLyric: {
       type: LyricType,
       args: { id: { type: GraphQLID } },
       resolve(parentValue, { id }) {
         return Lyric.like(id);
-      }
+      },
     },
     deleteLyric: {
       type: LyricType,
       args: { id: { type: GraphQLID } },
-      resolve(parentValue, {id}) {
+      resolve(parentValue, { id }) {
         return Lyric.findByIdAndRemove(id);
-      }
+      },
     },
     deleteSong: {
       type: SongType,
       args: { id: { type: GraphQLID } },
       resolve(parentValue, { id }) {
         return Song.findByIdAndRemove(id);
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 module.exports = mutation;
