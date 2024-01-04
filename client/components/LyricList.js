@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import likeLyricMutation from '../mutations/likeLyric';
 import deleteLyricMutation from '../mutations/deleteLyric';
 import fetchSong from '../queries/fetchSong';
+import updateLyricMutation from '../mutations/updateLyric';
 
 class LyricList extends Component {
   constructor(props) {
@@ -40,6 +41,13 @@ class LyricList extends Component {
     });
   }
 
+  onEdit({id, likes, content}) {
+    content = prompt('Lyric edition', content);
+    this.props.updateLyricMutation({
+      variables: { id, content, likes },
+    })
+  }
+
   renderLyrics() {
     return this.props.lyrics.map(({ id, content, likes }) => {
       return (
@@ -53,6 +61,12 @@ class LyricList extends Component {
               thumb_up
             </i>
             <div className='likes'>{likes}</div>
+            <i
+              className='material-icons'
+              onClick={() => this.onEdit({ id, content, likes })}
+            >
+              edit
+            </i>
             <i className='material-icons' onClick={() => this.remove(id)}>
               delete_forever
             </i>
@@ -64,6 +78,7 @@ class LyricList extends Component {
 }
 
 export default compose(
+  graphql(updateLyricMutation, { name: 'updateLyricMutation' }),
   graphql(likeLyricMutation, { name: 'likeLyricMutation' }),
   graphql(deleteLyricMutation, { name: 'deleteLyricMutation' })
 )(LyricList);

@@ -15,7 +15,6 @@ class SongEdit extends Component {
     this.props
       .mutate({
         variables: { id: this.props.params.id, title },
-        refetchQueries: [{ query: fetchSongs }],
       })
       .then(() => {
         hashHistory.push('/');
