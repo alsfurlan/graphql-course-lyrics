@@ -4,14 +4,16 @@ const expressGraphQL = require('express-graphql');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const schema = require('./schema/schema');
+const passport = require('passport');
 
 const app = express();
 
 // Replace with your Mongo Atlas URI
-const MONGO_URI = 'mongodb+srv://alsfurlan:xrgUJGiH35XQnZYa@cluster0.jv44ec2.mongodb.net/?retryWrites=true&w=majority';
-if (!MONGO_URI) { 
+const MONGO_URI =
+  'mongodb+srv://alsfurlan:xrgUJGiH35XQnZYa@cluster0.jv44ec2.mongodb.net/?retryWrites=true&w=majority';
+if (!MONGO_URI) {
   throw new Error('You must provide a Mongo Atlas URI');
-} 
+}
 
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGO_URI);
@@ -21,12 +23,15 @@ mongoose.connection
     console.log('Error connecting to Mongo Atlas:', error)
   );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(bodyParser.json());
 app.use(
   '/graphql',
   expressGraphQL({
     schema,
-    graphiql: true
+    graphiql: true,
   })
 );
 

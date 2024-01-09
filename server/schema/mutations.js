@@ -5,6 +5,8 @@ const Song = mongoose.model('song');
 const Lyric = mongoose.model('lyric');
 const SongType = require('./song_type');
 const LyricType = require('./lyric_type');
+const UserType = require('./user_type');
+const AuthService = require('../services/auth');
 
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -25,7 +27,7 @@ const mutation = new GraphQLObjectType({
         title: { type: GraphQLString },
       },
       resolve(parentValue, { id, title }) {
-        return Song.findByIdAndUpdate(id, { title }, { new: true});
+        return Song.findByIdAndUpdate(id, { title }, { new: true });
       },
     },
     addLyricToSong: {
@@ -53,7 +55,11 @@ const mutation = new GraphQLObjectType({
         likes: { type: GraphQLInt },
       },
       resolve(parentValue, { id, content, likes }) {
-        return Lyric.findOneAndUpdate({ _id: id }, { content, likes }, { new: true});
+        return Lyric.findOneAndUpdate(
+          { _id: id },
+          { content, likes },
+          { new: true }
+        );
       },
     },
     deleteLyric: {
@@ -70,6 +76,35 @@ const mutation = new GraphQLObjectType({
         return Song.findByIdAndRemove(id);
       },
     },
+    login: {
+      type: UserType,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      resolve(parentValue, { email, password }, request) {
+        return AuthService.login({ email, password, request });
+      },
+    },
+    signup: {
+      type: UserType,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      resolve(parentValue, { email, password }, request) {
+        console.log(AuthService);
+        return AuthService.signup({ email, password, request });
+      },
+    },
+    logout: {
+      type: UserType,
+      resolve(parentValue, args, request) {
+        const { user } = request;
+        request.logout();
+        return user;
+      }
+    }
   },
 });
 
