@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const schema = require('./schema/schema');
 const passport = require('passport');
-
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const app = express();
 
 // Replace with your Mongo Atlas URI
@@ -22,6 +23,18 @@ mongoose.connection
   .on('error', (error) =>
     console.log('Error connecting to Mongo Atlas:', error)
   );
+  app.use(
+    session({
+      resave: true,
+      saveUninitialized: true,
+      secret: 'aaabbbccc',
+      store: new MongoStore({
+        url: MONGO_URI,
+        autoReconnect: true
+      })
+    })
+  );
+  
 
 app.use(passport.initialize());
 app.use(passport.session());

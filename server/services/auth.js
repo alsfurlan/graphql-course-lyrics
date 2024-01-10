@@ -7,16 +7,14 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  UserModel.findById(id, (error, user) => {
-    done(error, user);
-  });
+  UserModel.findById(id)
+    .then((user) => done(null, user))
+    .catch((error) => done(error, null));
 });
 
 const strategy = new LocalStrategy(
   { usernameField: 'email' },
   (email, password, done) => {
-    console.log('email: ', email);
-    console.log('password: ', password);
     return UserModel.findOne({ email: email.toLowerCase() })
       .then((user) => {
         if (!user || user.password !== password) {
@@ -61,7 +59,7 @@ const signup = ({ email, password, request }) => {
 const login = ({ email, password, request }) => {
   return new Promise((resolve, reject) => {
     passport.authenticate('local', (error, user) => {
-      if (error || !user) { 
+      if (error || !user) {
         reject('Invalid credentials');
       }
       request.login(user, () => resolve(user));
