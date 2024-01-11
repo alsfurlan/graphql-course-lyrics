@@ -9,6 +9,7 @@ import SongCreate from './components/SongCreate';
 import SongDetail from './components/SongDetail';
 import './style/style.css';
 import SongEdit from './components/SongEdit';
+import LoginForm from './components/LoginForm';
 
 const client = new ApolloClient({
   dataIdFromObject: (o) => o.id,
@@ -23,6 +24,7 @@ const Root = () => {
           <Route path='songs/new' component={SongCreate} />
           <Route path='songs/:id' component={SongDetail} />
           <Route path='songs/edit/:id' component={SongEdit} />
+          <Route path='login' component={LoginForm} />
         </Route>
       </Router>
     </ApolloProvider>
