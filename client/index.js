@@ -10,6 +10,7 @@ import SongDetail from './components/SongDetail';
 import './style/style.css';
 import SongEdit from './components/SongEdit';
 import LoginForm from './components/LoginForm';
+import requireAuth from './components/requireAuth';
 
 const client = new ApolloClient({
   dataIdFromObject: (o) => o.id,
@@ -20,10 +21,10 @@ const Root = () => {
     <ApolloProvider client={client}>
       <Router history={hashHistory}>
         <Route path='/' component={App}>
-          <IndexRoute component={SongList} />
-          <Route path='songs/new' component={SongCreate} />
-          <Route path='songs/:id' component={SongDetail} />
-          <Route path='songs/edit/:id' component={SongEdit} />
+          <IndexRoute component={requireAuth(SongList)} />
+          <Route path='songs/new' component={requireAuth(SongCreate)} />
+          <Route path='songs/:id' component={requireAuth(SongDetail)} />
+          <Route path='songs/edit/:id' component={requireAuth(SongEdit)} />
           <Route path='login' component={LoginForm} />
         </Route>
       </Router>

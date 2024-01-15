@@ -13,6 +13,12 @@ class LoginForm extends Component {
     };
   }
 
+  componentWillUpdate(nextProps) {
+    if(this.props.data.user === null && nextProps.data.user) {
+      hashHistory.push('/');
+    }
+  }
+
   onSubmit(event) {
     event.preventDefault();
     const { email, password } = this.state;
@@ -49,4 +55,4 @@ class LoginForm extends Component {
   }
 }
 
-export default graphql(loginMutation)(LoginForm);
+export default graphql(userQuery)(graphql(loginMutation)(LoginForm));
