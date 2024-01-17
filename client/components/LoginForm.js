@@ -28,7 +28,7 @@ class LoginForm extends Component {
   }
 
   render() {
-    return <AuthForm onSubmit={(event) => this.onSubmit(event)} />;
+    return <AuthForm title="Login" onSubmit={(event) => this.onSubmit(event)} />;
   }
 }
 

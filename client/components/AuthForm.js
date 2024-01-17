@@ -19,7 +19,7 @@ export default class AuthForm extends Component {
   render() {
     return (
       <form onSubmit={(event) => this.onSubmit(event)}>
-        <h1>Login</h1>
+        <h1>{this.props.title}</h1>
         <input
           type='text'
           placeholder='User'
