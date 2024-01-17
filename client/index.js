@@ -10,6 +10,7 @@ import SongDetail from './components/SongDetail';
 import './style/style.css';
 import SongEdit from './components/SongEdit';
 import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
 import requireAuth from './components/requireAuth';
 
 const client = new ApolloClient({
@@ -26,6 +27,7 @@ const Root = () => {
           <Route path='songs/:id' component={requireAuth(SongDetail)} />
           <Route path='songs/edit/:id' component={requireAuth(SongEdit)} />
           <Route path='login' component={LoginForm} />
+          <Route path='signup' component={SignupForm} />
         </Route>
       </Router>
     </ApolloProvider>
